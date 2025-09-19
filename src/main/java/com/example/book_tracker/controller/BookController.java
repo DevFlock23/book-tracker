@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import java.util.List;
 
 @RestController
@@ -18,8 +21,14 @@ public class BookController {
     public BookController(BookService service) { this.service = service; }
 
     @GetMapping
-     @Operation(summary = "Get all books", description = "Returns a list of all books in the database")
-    public List<Book> getBooks() { return service.getAllBooks(); }
+     @Operation(summary = "Get all books (paginated)", description = "Returns a paginated list of books")
+    public Page<Book> getBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String title
+    ) {
+        return service.getBooksFiltered(title, PageRequest.of(page, size));
+    }
 
     @PostMapping
     @Operation(summary = "Add a new book", description = "Adds a new book to the database")

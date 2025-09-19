@@ -2,6 +2,8 @@ package com.example.book_tracker.service;
 
 import com.example.book_tracker.model.Book;
 import com.example.book_tracker.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -21,4 +23,15 @@ public class BookService {
     }
     public void deleteBook(Long id) { repository.deleteById(id); }
     public List<Book> searchByAuthor(String author) { return repository.findByAuthorContainingIgnoreCase(author); }
+
+    public Page<Book> getAllBooks(PageRequest pageRequest) {
+        return repository.findAll(pageRequest);
+    }
+
+    public Page<Book> getBooksFiltered(String title, PageRequest pageRequest) {
+        if (title != null && !title.isEmpty()) {
+            return repository.findByTitleContainingIgnoreCase(title, pageRequest);
+        }
+        return repository.findAll(pageRequest);
+    }
 }
