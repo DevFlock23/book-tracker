@@ -19,6 +19,9 @@ public class Book {
         this.read = read;
     }
 
+    public Long getId() {
+    return id;
+    }
 
     public String getTitle() {
         return title;

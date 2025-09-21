@@ -16,10 +16,12 @@ public class BookService {
     public BookService(BookRepository repository) { this.repository = repository; }
 
     public List<Book> getAllBooks() { return repository.findAll(); }
+    
     public Book addBook(Book book) {
         logger.debug("Adding book: {}", book);
         return repository.save(book);
     }
+
     public Book updateBook(Long id, Book bookDetails) {
         Book book = repository.findById(id).orElseThrow();
         book.setTitle(bookDetails.getTitle());
@@ -32,7 +34,11 @@ public class BookService {
         logger.debug("Deleting book with id {}", id);
         repository.deleteById(id);
     }
-    public List<Book> searchByAuthor(String author) { return repository.findByAuthorContainingIgnoreCase(author); }
+
+    public List<Book> searchByAuthor(String author) {
+        logger.debug("Searching books by author: {}", author);
+        return repository.findByAuthorContainingIgnoreCase(author);
+    }
 
     public Page<Book> getAllBooks(PageRequest pageRequest) {
         return repository.findAll(pageRequest);
@@ -45,5 +51,10 @@ public class BookService {
         }
         logger.debug("Fetching all books (no filter)");
         return repository.findAll(pageRequest);
+    }
+
+    public Book getBookById(Long id) {
+        logger.debug("Fetching book with id {}", id);
+        return repository.findById(id).orElseThrow();
     }
 }

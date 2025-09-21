@@ -37,6 +37,13 @@ public class BookController {
         return service.getBooksFiltered(title, PageRequest.of(page, size));
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get a book by ID", description = "Returns a single book by its ID")
+    public Book getBookById(@PathVariable Long id) {
+        logger.info("GET /api/books/{} requested", id);
+        return service.getBookById(id);
+    }
+
     @PostMapping
     @Operation(summary = "Add a new book", description = "Adds a new book to the database")
     public Book addBook(@RequestBody Book book) {
